@@ -110,7 +110,7 @@ AUTHENTICATION_BACKENDS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Africa/Nairobi'
 
 USE_I18N = True
 
@@ -138,15 +138,14 @@ AUTH_USER_MODEL = 'accounts.CustomUser'
 
 
 AUTHENTICATION_BACKENDS = [
-    'axes.backends.AxesBackend',  # axes first
+    'axes.backends.AxesBackend', 
     'django.contrib.auth.backends.ModelBackend',
 ]
 
-AXES_FAILURE_LIMIT = 100
-AXES_COOLOFF_TIME = 100  # in hours
+AXES_FAILURE_LIMIT = 25
+AXES_COOLOFF_TIME = 100 
 AXES_LOCKOUT_TEMPLATE = 'accounts/lockout.html'
 
-AXES_LOCKOUT_TEMPLATE = 'accounts/lockout.html'
 
 
 
