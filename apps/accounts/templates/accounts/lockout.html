@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5 text-center">
+    <h2 class="text-danger">Account Locked</h2>
+    <p>Too many failed login attempts. Your account has been temporarily locked for security reasons.</p>
+    <p>Please wait a while and try again later.</p>
+    <a href="{% url 'login' %}" class="btn btn-primary mt-3">Go Back to Login</a>
+</div>
+{% endblock %}

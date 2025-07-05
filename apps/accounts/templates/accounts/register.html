@@ -1,0 +1,236 @@
+{% extends 'base.html' %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+<div class="card-header">
+    <h2>Create Your Account</h2>
+    <p>Join our community and unlock exclusive features</p>
+</div>
+
+<form method="post" id="registrationForm">
+    {% csrf_token %}
+    
+    <button type="button" class="google-btn">
+        <i class="fab fa-google"></i>
+        Sign up with Google
+    </button>
+    
+    <div class="divider">
+        <span>or with email</span>
+    </div>
+    
+    {% if form.errors %}
+    <div class="form-errors">
+        {% for field, errors in form.errors.items %}
+            {% for error in errors %}
+            <div class="error-message">{{ error }}</div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <div class="form-group">
+        <label for="id_username">Username</label>
+        <div class="input-with-icon">
+            <i class="fas fa-user"></i>
+            {{ form.username }}
+            <span class="error-icon"><i class="fas fa-exclamation-circle"></i></span>
+        </div>
+        <div class="error-message" id="username-error"></div>
+    </div>
+    
+    <div class="form-group">
+        <label for="id_email">Email Address</label>
+        <div class="input-with-icon">
+            <i class="fas fa-envelope"></i>
+            {{ form.email }}
+            <span class="error-icon"><i class="fas fa-exclamation-circle"></i></span>
+        </div>
+        <div class="error-message" id="email-error"></div>
+    </div>
+    
+    <div class="form-group">
+        <label for="id_password1">Password</label>
+        <div class="input-with-icon">
+            <i class="fas fa-lock"></i>
+            {{ form.password1 }}
+            <span class="password-toggle" onclick="togglePassword('id_password1')">
+                <i class="fas fa-eye"></i>
+            </span>
+            <span class="error-icon"><i class="fas fa-exclamation-circle"></i></span>
+        </div>
+        <div class="password-strength">
+            <div class="password-strength-meter" id="password-strength-meter"></div>
+        </div>
+        <div class="strength-text" id="password-strength-text">Password strength: none</div>
+        <div class="error-message" id="password-error"></div>
+    </div>
+    
+    <div class="form-group">
+        <label for="id_password2">Confirm Password</label>
+        <div class="input-with-icon">
+            <i class="fas fa-redo"></i>
+            {{ form.password2 }}
+            <span class="password-toggle" onclick="togglePassword('id_password2')">
+                <i class="fas fa-eye"></i>
+            </span>
+            <span class="error-icon"><i class="fas fa-exclamation-circle"></i></span>
+        </div>
+        <div class="error-message" id="confirmPassword-error"></div>
+    </div>
+    
+    <div class="terms">
+        <input type="checkbox" id="terms" name="terms" required>
+        <label for="terms">I agree to the <a href="#">Terms</a> and <a href="#">Privacy Policy</a></label>
+    </div>
+    <div class="error-message" id="terms-error"></div>
+    
+    <button type="submit" class="btn" id="submitBtn">
+        <i class="fas fa-user-plus" style="margin-right: 8px;"></i>
+        <span class="btn-text">Create Account</span>
+    </button>
+</form>
+
+<div class="auth-link">
+    Already have an account? <a href="{% url 'login' %}">Sign In</a>
+</div>
+
+{% if show_loading %}
+<!-- Success message with loading animation -->
+<div class="success-message">
+    <i class="fas fa-check-circle"></i>
+    <h3>Account Created Successfully!</h3>
+    <p>Welcome, {{ user_email }}! Redirecting to login...</p>
+    <div style="margin-top: 20px;">
+        <i class="fas fa-spinner fa-spin" style="font-size: 2rem;"></i>
+    </div>
+</div>
+
+<script>
+    // Redirect after showing success message
+    setTimeout(() => {
+        window.location.href = "{% url 'login' %}";
+    }, 3000);
+</script>
+{% endif %}
+
+<script>
+    // Password strength indicator
+    document.getElementById('id_password1').addEventListener('input', function() {
+        const password = this.value;
+        const meter = document.getElementById('password-strength-meter');
+        const text = document.getElementById('password-strength-text');
+        
+        // Reset classes
+        meter.className = 'password-strength-meter';
+        
+        if (!password) {
+            meter.style.width = '0';
+            text.textContent = 'Password strength: none';
+            return;
+        }
+        
+        // Calculate strength
+        let strength = 0;
+        if (password.length >= 4) strength += 1;
+        if (password.length >= 6) strength += 1;
+        if (password.match(/[a-z]+/)) strength += 1;
+        if (password.match(/[A-Z]+/)) strength += 1;
+        if (password.match(/[0-9]+/)) strength += 1;
+        if (password.match(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/)) strength += 1;
+        
+        // Update visual indicator
+        if (strength < 2) {
+            meter.classList.add('strength-weak');
+            text.textContent = 'Password strength: weak';
+        } else if (strength < 4) {
+            meter.classList.add('strength-medium');
+            text.textContent = 'Password strength: medium';
+        } else {
+            meter.classList.add('strength-strong');
+            text.textContent = 'Password strength: strong';
+        }
+    });
+    
+    // Form submission with loading effect
+    document.getElementById('registrationForm').addEventListener('submit', function(e) {
+        let isValid = true;
+        
+        // Reset error states
+        document.querySelectorAll('.form-group').forEach(group => {
+            group.classList.remove('invalid');
+        });
+        
+        // Validate username
+        const username = document.getElementById('id_username').value;
+        if (!username || username.length < 3) {
+            document.getElementById('id_username').closest('.form-group').classList.add('invalid');
+            document.getElementById('username-error').textContent = 'Username must be at least 3 characters';
+            document.getElementById('username-error').style.display = 'block';
+            isValid = false;
+        }
+        
+        // Validate email
+        const email = document.getElementById('id_email').value;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!email || !emailRegex.test(email)) {
+            document.getElementById('id_email').closest('.form-group').classList.add('invalid');
+            document.getElementById('email-error').textContent = 'Please enter a valid email address';
+            document.getElementById('email-error').style.display = 'block';
+            isValid = false;
+        }
+        
+        // Validate password
+        const password = document.getElementById('id_password1').value;
+        if (!password || password.length < 4) {
+            document.getElementById('id_password1').closest('.form-group').classList.add('invalid');
+            document.getElementById('password-error').textContent = 'Password must be at least 4 characters';
+            document.getElementById('password-error').style.display = 'block';
+            isValid = false;
+        }
+        
+        // Validate password confirmation
+        const confirmPassword = document.getElementById('id_password2').value;
+        if (password !== confirmPassword) {
+            document.getElementById('id_password2').closest('.form-group').classList.add('invalid');
+            document.getElementById('confirmPassword-error').textContent = 'Passwords do not match';
+            document.getElementById('confirmPassword-error').style.display = 'block';
+            isValid = false;
+        }
+        
+        // Validate terms
+        const terms = document.getElementById('terms').checked;
+        if (!terms) {
+            document.getElementById('terms-error').textContent = 'You must agree to the terms';
+            document.getElementById('terms-error').style.display = 'block';
+            isValid = false;
+        }
+        
+        if (isValid) {
+            // Show loading state
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.classList.add('btn-loading');
+            submitBtn.disabled = true;
+        } else {
+            e.preventDefault();
+        }
+    });
+    
+    // Toggle password visibility
+    function togglePassword(fieldId) {
+        const field = document.getElementById(fieldId);
+        const icon = field.nextElementSibling.querySelector('i');
+        
+        if (field.type === 'password') {
+            field.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            field.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    }
+</script>
+{% endblock %}

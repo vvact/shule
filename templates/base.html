@@ -1,0 +1,765 @@
+<!-- templates/base.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SecureAuth - {% block title %}{% endblock %}</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+
+      :root {
+        --primary: #4285f4;
+        --secondary: #34a853;
+        --accent: #fbbc05;
+        --error: #ea4335;
+        --light: #f8f9fa;
+        --dark: #202124;
+        --gray: #5f6368;
+        --border: #dadce0;
+        --card-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+        --transition: all 0.3s ease;
+        --success: #34a853;
+      }
+
+      body {
+        background: linear-gradient(135deg, #f0f7ff 0%, #e6f0ff 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 15px;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 480px;
+        animation: fadeIn 0.8s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .logo {
+        text-align: center;
+        margin-bottom: 25px;
+        padding: 0 15px;
+      }
+
+      .logo h1 {
+        color: var(--dark);
+        font-size: 2.2rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        letter-spacing: -0.5px;
+      }
+
+      .logo h1 i {
+        color: var(--primary);
+        background: rgba(66, 133, 244, 0.1);
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+      }
+
+      .card {
+        background: white;
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: var(--card-shadow);
+        padding: 35px 25px;
+        position: relative;
+        border: 1px solid rgba(218, 220, 224, 0.3);
+      }
+
+      .card-header {
+        text-align: center;
+        margin-bottom: 25px;
+      }
+
+      .card-header h2 {
+        font-size: 1.7rem;
+        color: var(--dark);
+        margin-bottom: 8px;
+        font-weight: 600;
+      }
+
+      .card-header p {
+        color: var(--gray);
+        font-size: 1rem;
+        line-height: 1.5;
+      }
+
+      /* Google Sign-in Button */
+      .google-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        width: 100%;
+        padding: 14px;
+        background: white;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        font-size: 1rem;
+        font-weight: 500;
+        color: var(--gray);
+        cursor: pointer;
+        transition: var(--transition);
+        margin-bottom: 20px;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
+      }
+
+      .google-btn:hover {
+        background: #f8f9fa;
+        box-shadow: 0 5px 12px rgba(0, 0, 0, 0.08);
+        transform: translateY(-2px);
+        border-color: #c2c8d0;
+      }
+
+      .google-btn i {
+        color: var(--primary);
+        font-size: 1.3rem;
+      }
+
+      .divider {
+        display: flex;
+        align-items: center;
+        margin: 25px 0;
+      }
+
+      .divider::before,
+      .divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--border),
+          transparent
+        );
+      }
+
+      .divider span {
+        padding: 0 12px;
+        color: var(--gray);
+        font-size: 0.85rem;
+        font-weight: 500;
+      }
+
+      /* Form Styles */
+      .form-group {
+        margin-bottom: 22px;
+        position: relative;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: var(--dark);
+        font-size: 0.92rem;
+        padding-left: 3px;
+      }
+
+      .input-with-icon {
+        position: relative;
+      }
+
+      .input-with-icon i {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--gray);
+        font-size: 16px;
+        transition: var(--transition);
+        z-index: 2;
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 14px 16px 14px 45px;
+        border: 2px solid var(--border);
+        border-radius: 12px;
+        font-size: 0.98rem;
+        transition: var(--transition);
+        background: #fcfdff;
+        position: relative;
+        z-index: 1;
+      }
+
+      .form-control:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px rgba(66, 133, 244, 0.15);
+        background: white;
+      }
+
+      .password-toggle {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: var(--gray);
+        transition: var(--transition);
+        background: rgba(0, 0, 0, 0.03);
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2;
+      }
+
+      .password-toggle:hover {
+        color: var(--dark);
+        background: rgba(0, 0, 0, 0.06);
+      }
+
+      .terms {
+        display: flex;
+        align-items: flex-start;
+        margin: 25px 0;
+        gap: 12px;
+      }
+
+      .terms input {
+        margin-top: 5px;
+        cursor: pointer;
+      }
+
+      .terms label {
+        color: var(--gray);
+        line-height: 1.6;
+        font-size: 0.9rem;
+        font-weight: 400;
+      }
+
+      .terms a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 500;
+        transition: var(--transition);
+      }
+
+      .terms a:hover {
+        text-decoration: underline;
+      }
+
+      .remember-forgot {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 22px 0 25px;
+        flex-wrap: wrap;
+      }
+
+      .remember {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 10px;
+      }
+
+      .remember input {
+        cursor: pointer;
+      }
+
+      .remember label {
+        color: var(--gray);
+        cursor: pointer;
+        font-size: 0.92rem;
+      }
+
+      .forgot-password {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 0.92rem;
+        transition: var(--transition);
+        white-space: nowrap;
+      }
+
+      .forgot-password:hover {
+        text-decoration: underline;
+      }
+
+      .btn {
+        display: block;
+        width: 100%;
+        padding: 16px;
+        background: linear-gradient(to right, var(--primary), #3a73e0);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 1.08rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: var(--transition);
+        box-shadow: 0 6px 16px rgba(66, 133, 244, 0.3);
+        letter-spacing: 0.3px;
+      }
+
+      .btn:hover {
+        background: linear-gradient(to right, #3a73e0, var(--primary));
+        box-shadow: 0 8px 22px rgba(66, 133, 244, 0.4);
+        transform: translateY(-2px);
+      }
+
+      .btn:active {
+        transform: translateY(0);
+      }
+
+      .auth-link {
+        text-align: center;
+        margin-top: 25px;
+        color: var(--gray);
+        font-size: 0.95rem;
+      }
+
+      .auth-link a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 500;
+        transition: var(--transition);
+      }
+
+      .auth-link a:hover {
+        text-decoration: underline;
+      }
+
+      /* Validation Styles */
+      .error-message {
+        color: var(--error);
+        font-size: 0.84rem;
+        margin-top: 8px;
+        display: none;
+        padding-left: 3px;
+        animation: fadeIn 0.3s ease;
+      }
+
+      .error-icon {
+        position: absolute;
+        right: 50px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--error);
+        background: rgba(234, 67, 53, 0.1);
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 3;
+      }
+
+      .invalid .form-control {
+        border-color: var(--error);
+        padding-right: 75px;
+        background: #fffafa;
+      }
+
+      .invalid .input-with-icon i {
+        color: var(--error);
+      }
+
+      .invalid .error-icon {
+        display: flex;
+      }
+
+      .invalid .error-message {
+        display: block;
+      }
+
+      /* Password Strength */
+      .password-strength {
+        height: 5px;
+        background: #eee;
+        border-radius: 3px;
+        margin-top: 8px;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .password-strength-meter {
+        height: 100%;
+        width: 0;
+        background: #ddd;
+        border-radius: 3px;
+        transition: width 0.4s ease;
+      }
+
+      .strength-weak {
+        background: #ea4335;
+        width: 30%;
+      }
+      .strength-medium {
+        background: #fbbc05;
+        width: 60%;
+      }
+      .strength-strong {
+        background: #34a853;
+        width: 100%;
+      }
+
+      .strength-text {
+        font-size: 0.82rem;
+        margin-top: 6px;
+        text-align: right;
+        color: var(--gray);
+        font-weight: 500;
+      }
+
+      /* Success Message */
+      .success-message {
+        background: rgba(52, 168, 83, 0.1);
+        border: 1px solid rgba(52, 168, 83, 0.2);
+        border-radius: 14px;
+        padding: 20px;
+        text-align: center;
+        margin-top: 20px;
+        display: none;
+        animation: fadeIn 0.5s ease;
+      }
+
+      .success-message i {
+        font-size: 2.8rem;
+        color: var(--success);
+        margin-bottom: 12px;
+      }
+
+      .success-message h3 {
+        margin: 8px 0 6px;
+        color: var(--dark);
+        font-size: 1.3rem;
+      }
+
+      .success-message p {
+        color: var(--gray);
+        font-size: 0.98rem;
+        line-height: 1.5;
+      }
+
+      /* Form Errors */
+      .form-errors {
+        background: rgba(234, 67, 53, 0.1);
+        padding: 14px;
+        border-radius: 10px;
+        margin-bottom: 18px;
+        font-size: 0.92rem;
+      }
+
+      .form-errors .error-message {
+        display: block;
+        color: var(--error);
+        font-weight: 500;
+      }
+
+      /* Tab Container */
+      .auth-tabs {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 25px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .auth-tab {
+        padding: 12px 25px;
+        cursor: pointer;
+        font-weight: 500;
+        color: var(--gray);
+        transition: var(--transition);
+        border-bottom: 3px solid transparent;
+        margin-bottom: -1px;
+      }
+
+      .auth-tab.active {
+        color: var(--primary);
+        border-bottom: 3px solid var(--primary);
+      }
+
+      /* Responsive design */
+      @media (max-width: 480px) {
+        .logo h1 {
+          font-size: 1.9rem;
+        }
+
+        .logo h1 i {
+          width: 46px;
+          height: 46px;
+          font-size: 1.3rem;
+        }
+
+        .card {
+          padding: 30px 20px;
+          border-radius: 20px;
+        }
+
+        .card-header h2 {
+          font-size: 1.5rem;
+        }
+
+        .card-header p {
+          font-size: 0.94rem;
+        }
+
+        .form-control {
+          padding: 13px 15px 13px 42px;
+          font-size: 0.95rem;
+        }
+
+        .input-with-icon i {
+          font-size: 15px;
+          left: 14px;
+        }
+
+        .password-toggle {
+          width: 32px;
+          height: 32px;
+          right: 14px;
+        }
+
+        .error-icon {
+          right: 45px;
+          width: 26px;
+          height: 26px;
+          font-size: 0.9rem;
+        }
+
+        .invalid .form-control {
+          padding-right: 70px;
+        }
+
+        .btn {
+          padding: 15px;
+          font-size: 1.05rem;
+        }
+
+        .terms {
+          margin: 20px 0;
+        }
+
+        .terms label {
+          font-size: 0.88rem;
+        }
+
+        .auth-tab {
+          padding: 10px 20px;
+          font-size: 0.95rem;
+        }
+      }
+
+      @media (max-width: 360px) {
+        .logo h1 {
+          font-size: 1.7rem;
+        }
+
+        .card {
+          padding: 25px 18px;
+        }
+
+        .remember-forgot {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 12px;
+        }
+
+        .divider span {
+          font-size: 0.8rem;
+        }
+      }
+
+      /* Page switching */
+      .page {
+        display: none;
+      }
+
+      .page.active {
+        display: block;
+      }
+
+      /* Add to your CSS */
+.btn {
+    position: relative;
+    overflow: hidden;
+}
+
+#loadingSpinner {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2rem;
+
+
+
+}
+
+
+/* Add these to your existing CSS */
+  .btn-loading .btn-text {
+    visibility: hidden;
+    opacity: 0;
+  }
+
+  .btn-loading::after {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    border: 4px solid transparent;
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: button-loading-spinner 1s ease infinite;
+  }
+
+  @keyframes button-loading-spinner {
+    from {
+      transform: rotate(0turn);
+    }
+    to {
+      transform: rotate(1turn);
+    }
+  }
+
+  .success-message {
+    background: rgba(52, 168, 83, 0.1);
+    border: 1px solid rgba(52, 168, 83, 0.2);
+    border-radius: 14px;
+    padding: 20px;
+    text-align: center;
+    margin-top: 20px;
+    animation: fadeIn 0.5s ease;
+  }
+
+  .success-message i {
+    font-size: 2.8rem;
+    color: var(--success);
+    margin-bottom: 12px;
+  }
+
+  .success-message h3 {
+    margin: 8px 0 6px;
+    color: var(--dark);
+    font-size: 1.3rem;
+  }
+
+  .success-message p {
+    color: var(--gray);
+    font-size: 0.98rem;
+    line-height: 1.5;
+  }
+
+  /* Loading animation */
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  .fa-spin {
+    animation: spin 1s linear infinite;
+  }
+    </style>
+
+
+  </head>
+  <body>
+    <div class="container">
+      <div class="logo">
+        <h1><i class="fas fa-lock"></i>SecureAuth</h1>
+      </div>
+
+      <div class="auth-tabs">
+        <a
+          href="{% url 'register' %}"
+          class="auth-tab {% if request.resolver_match.url_name == 'signup' %}active{% endif %}"
+          >Sign Up</a
+        >
+        <a
+          href="{% url 'login' %}"
+          class="auth-tab {% if request.resolver_match.url_name == 'login' %}active{% endif %}"
+          >Sign In</a
+        >
+      </div>
+
+      <div class="card">{% block content %}{% endblock %}</div>
+    </div>
+
+    <script>
+      // Common JavaScript functions
+      function togglePassword(fieldId) {
+        const field = document.getElementById(fieldId);
+        const icon = field.nextElementSibling.querySelector("i");
+
+        if (field.type === "password") {
+          field.type = "text";
+          icon.classList.remove("fa-eye");
+          icon.classList.add("fa-eye-slash");
+        } else {
+          field.type = "password";
+          icon.classList.remove("fa-eye-slash");
+          icon.classList.add("fa-eye");
+        }
+      }
+
+      // Google sign-in button functionality
+      document.addEventListener("DOMContentLoaded", function () {
+        // Attach to all Google buttons
+        document.querySelectorAll(".google-btn").forEach((btn) => {
+          btn.addEventListener("click", function () {
+            // Show loading state
+            const originalHTML = this.innerHTML;
+            this.innerHTML =
+              '<i class="fas fa-spinner fa-spin"></i> Authenticating...';
+
+            // Simulate Google authentication
+            setTimeout(() => {
+              this.innerHTML = originalHTML;
+              alert("Google authentication successful!");
+              // In a real app, you would redirect to Google OAuth here
+             
+            }, 1500);
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

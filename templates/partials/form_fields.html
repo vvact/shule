@@ -1,0 +1,37 @@
+{% if form.non_field_errors %}
+<div class="form-errors">
+    {% for error in form.non_field_errors %}
+    <div class="error-message">{{ error }}</div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% for field in form %}
+<div class="form-group {% if field.errors %}invalid{% endif %}">
+    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+    <div class="input-with-icon">
+        {% if field.name == 'username' %}
+            <i class="fas fa-user"></i>
+        {% elif field.name == 'email' %}
+            <i class="fas fa-envelope"></i>
+        {% elif field.name == 'password1' %}
+            <i class="fas fa-lock"></i>
+        {% elif field.name == 'password2' %}
+            <i class="fas fa-redo"></i>
+        {% endif %}
+
+        {{ field }}
+        <span class="error-icon"><i class="fas fa-exclamation-circle"></i></span>
+    </div>
+    {% for error in field.errors %}
+        <div class="error-message">{{ error }}</div>
+    {% endfor %}
+</div>
+{% endfor %}
+
+<!-- Terms -->
+<div class="terms">
+    <input type="checkbox" id="terms" name="terms" required>
+    <label for="terms">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</label>
+</div>
+<div class="error-message" id="terms-error" style="display: none;">You must agree to the terms</div>
