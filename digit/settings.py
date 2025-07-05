@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'axes',
 
     'apps.accounts',
+    'apps.core',
 ]
 
 MIDDLEWARE = [
@@ -141,8 +142,8 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
-AXES_FAILURE_LIMIT = 5
-AXES_COOLOFF_TIME = 1  # in hours
+AXES_FAILURE_LIMIT = 100
+AXES_COOLOFF_TIME = 100  # in hours
 AXES_LOCKOUT_TEMPLATE = 'accounts/lockout.html'
 
 AXES_LOCKOUT_TEMPLATE = 'accounts/lockout.html'
@@ -150,7 +151,7 @@ AXES_LOCKOUT_TEMPLATE = 'accounts/lockout.html'
 
 
 # or wherever you want to redirect after login
-LOGIN_REDIRECT_URL = '/'  # or wherever you want to redirect after login
+LOGIN_REDIRECT_URL = '/'  
 LOGOUT_REDIRECT_URL = '/accounts/login/'
 
 
