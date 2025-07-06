@@ -6,7 +6,7 @@ class Grade(models.Model):
     name = models.CharField(max_length=20)
 
 
-     class Meta:
+    class Meta:
         verbose_name = 'Grade'
         verbose_name_plural = 'Grades'
         ordering = ['name']

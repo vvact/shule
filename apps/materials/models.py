@@ -1,7 +1,7 @@
 # materials/models.py
 from django.db import models
 from ckeditor.fields import RichTextField
-from subjects.models import Topic
+from apps.subjects.models import Topic
 
 class Material(models.Model):
     MATERIAL_TYPE = (
