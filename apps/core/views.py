@@ -1,11 +1,15 @@
 from django.shortcuts import render
+from apps.subjects.models import Grade, Subject
+
 
 # Create your views here.
 def home(request):
-    """
-    Render the home page.
-    """
-    return render(request, 'core/home.html')
+    grades = Grade.objects.all()
+    subjects = Subject.objects.all()
+    return render(request, 'core/home.html', {
+        'grades': grades,
+        'subjects': subjects,
+    })
 
 def about(request):
     """
