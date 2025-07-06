@@ -1,95 +1,111 @@
 {% extends 'buda.html' %}
+{% block title %}Study Materials{% endblock %}
 
 {% block content %}
 <div class="container mt-5">
-  <h2 class="mb-4">📚 Find Study Materials</h2>
-
-  <!-- Filter Form -->
-  <form method="get" class="row g-3 mb-5">
-    <!-- Grade Dropdown -->
-    <div class="col-md-4">
-      <label for="grade" class="form-label">Grade</label>
-      <select name="grade" id="grade" class="form-control">
-        <option value="">-- Select Grade --</option>
-        {% for grade in grades %}
-          <option value="{{ grade.id }}" {% if grade.id|stringformat:'s' == selected_grade %}selected{% endif %}>
-            {{ grade.name }}
-          </option>
-        {% endfor %}
-      </select>
-    </div>
-
-    <!-- Subject Dropdown -->
-    <div class="col-md-4">
-      <label for="subject" class="form-label">Subject</label>
-      <select name="subject" id="subject" class="form-control">
-        <option value="">-- Select Subject --</option>
-        {% for subject in subjects %}
-          <option value="{{ subject.id }}" {% if subject.id|stringformat:'s' == selected_subject %}selected{% endif %}>
-            {{ subject.name }}
-          </option>
-        {% endfor %}
-      </select>
-    </div>
-
-    <!-- Topic Dropdown -->
-    <div class="col-md-4">
-      <label for="topic" class="form-label">Topic</label>
-      <select name="topic" id="topic" class="form-control">
-        <option value="">-- Select Topic --</option>
-        {% for topic in topics %}
-          <option value="{{ topic.id }}" {% if topic.id|stringformat:'s' == selected_topic %}selected{% endif %}>
-            {{ topic.name }}
-          </option>
-        {% endfor %}
-      </select>
-    </div>
-
-    <div class="col-12 mt-3">
-      <button type="submit" class="btn btn-primary">🔍 Search</button>
-    </div>
-  </form>
-
-  <!-- Display Results -->
-  {% if notes or questions or papers %}
-    {% if notes %}
-      <h4 class="mt-4">📘 Notes</h4>
-      {% for note in notes %}
-        <div class="card mb-2">
-          <div class="card-body">{{ note.content|safe }}</div>
-        </div>
-      {% empty %}
-        <p>No notes found.</p>
-      {% endfor %}
-    {% endif %}
-
-    {% if questions %}
-      <h4 class="mt-4">📝 Topical Questions</h4>
-      {% for q in questions %}
-        <div class="card mb-2">
-          <div class="card-body">{{ q.content|safe }}</div>
-        </div>
-      {% empty %}
-        <p>No questions found.</p>
-      {% endfor %}
-    {% endif %}
-
-    {% if papers %}
-      <h4 class="mt-4">📄 Past Papers</h4>
-      {% for paper in papers %}
-        <div class="card mb-2">
-          <div class="card-body">
-            {% if paper.embed_url %}
-              <iframe src="{{ paper.embed_url }}" width="100%" height="500px" style="border: none;"></iframe>
-            {% else %}
-              {{ paper.content|safe }}
-            {% endif %}
+  <div class="row">
+    <!-- Sidebar: Filtering Form -->
+    <div class="col-md-4 mb-4">
+      <div class="card p-3">
+        <h5 class="mb-3">📚 Filter Materials</h5>
+        <form method="get">
+          <!-- Grade -->
+          <div class="mb-3">
+            <label for="grade" class="form-label">Grade</label>
+            <select name="grade" id="grade" class="form-select">
+              <option value="">-- Select Grade --</option>
+              {% for grade in grades %}
+                <option value="{{ grade.id }}" {% if grade.id|stringformat:"s" == selected_grade %}selected{% endif %}>
+                  {{ grade.name }}
+                </option>
+              {% endfor %}
+            </select>
           </div>
-        </div>
-      {% empty %}
-        <p>No past papers found.</p>
-      {% endfor %}
-    {% endif %}
-  {% endif %}
+
+          <!-- Subject -->
+          <div class="mb-3">
+            <label for="subject" class="form-label">Subject</label>
+            <select name="subject" id="subject" class="form-select">
+              <option value="">-- Select Subject --</option>
+              {% for subject in subjects %}
+                <option value="{{ subject.id }}" {% if subject.id|stringformat:"s" == selected_subject %}selected{% endif %}>
+                  {{ subject.name }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <!-- Topic -->
+          <div class="mb-3">
+            <label for="topic" class="form-label">Topic</label>
+            <select name="topic" id="topic" class="form-select">
+              <option value="">-- Select Topic --</option>
+              {% for topic in topics %}
+                <option value="{{ topic.id }}" {% if topic.id|stringformat:"s" == selected_topic %}selected{% endif %}>
+                  {{ topic.name }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <!-- Buttons -->
+          <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary">🔍 Search</button>
+            <a href="{% url 'materials:material_filter' %}" class="btn btn-secondary">🧹 Clear Filter</a>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="col-md-8">
+      {% if selected_topic %}
+        {% if notes or questions or papers %}
+          <!-- Notes Section -->
+          {% if notes %}
+            <h4 class="mb-3">📘 Notes</h4>
+            {% for note in notes %}
+              <div class="card mb-3">
+                <div class="card-body">{{ note.content|safe }}</div>
+              </div>
+            {% endfor %}
+          {% endif %}
+
+          <!-- Topical Questions Section -->
+          {% if questions %}
+            <h4 class="mt-5 mb-3">📝 Topical Questions</h4>
+            {% for q in questions %}
+              <div class="card mb-3">
+                <div class="card-body">{{ q.content|safe }}</div>
+              </div>
+            {% endfor %}
+          {% endif %}
+
+          <!-- Past Papers Section -->
+          {% if papers %}
+            <h4 class="mt-5 mb-3">📄 Past Papers</h4>
+            {% for paper in papers %}
+              <div class="card mb-3">
+                <div class="card-body">
+                  {% if paper.embed_url %}
+                    <iframe src="{{ paper.embed_url }}" width="100%" height="500px" style="border: none;"></iframe>
+                  {% else %}
+                    {{ paper.content|safe }}
+                  {% endif %}
+                </div>
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% else %}
+          <!-- No materials found -->
+          <div class="alert alert-warning">
+            ❗ No study materials found for the selected topic.
+          </div>
+        {% endif %}
+      {% else %}
+        <p class="text-muted">Please select a Grade, Subject, and Topic to view materials.</p>
+      {% endif %}
+    </div>
+  </div>
 </div>
 {% endblock %}

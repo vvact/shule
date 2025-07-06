@@ -9,7 +9,7 @@ class GradeAdmin(admin.ModelAdmin):
     ordering = ('name',)
 @admin.register(Subject)
 class SubjectAdmin(admin.ModelAdmin):
-    list_display = ('name', 'description')
+    list_display = ('name', 'grade')
     search_fields = ('name',)
     ordering = ('name',)
     prepopulated_fields = {'name': ('name',)}

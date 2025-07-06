@@ -17,8 +17,10 @@ class Grade(models.Model):
 
 
 class Subject(models.Model):
+    """Model representing a subject within a grade."""
+    grade = models.ForeignKey(Grade, on_delete=models.CASCADE, related_name='subjects')
+    # e.g., Mathematics, English, Science
     name = models.CharField(max_length=100, unique=True)
-    description = models.TextField(blank=True, null=True)
 
     class Meta:
         verbose_name = 'Subject'
@@ -37,6 +39,7 @@ class Subject(models.Model):
 
 
 class Topic(models.Model):
+    """Model representing a topic within a subject."""
     name = models.CharField(max_length=100)  # e.g., Algebra
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
 
