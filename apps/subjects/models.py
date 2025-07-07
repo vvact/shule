@@ -8,6 +8,11 @@ class Grade(models.Model):
         verbose_name_plural = 'Grades'
         ordering = ['name']
 
+    def save(self, *args, **kwargs):
+        # Normalize: remove extra spaces, capitalize words
+        self.name = self.name.strip().title()
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.name
 
@@ -21,6 +26,10 @@ class Subject(models.Model):
         verbose_name = 'Subject'
         verbose_name_plural = 'Subjects'
         unique_together = ('name', 'grade')
+
+    def save(self, *args, **kwargs):
+        self.name = self.name.strip().title()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.name} ({self.grade.name})"  # ✅ e.g. Math (Grade 6)
@@ -39,3 +48,7 @@ class Topic(models.Model):
         verbose_name_plural = 'Topics'
         unique_together = ('name', 'subject')
         ordering = ['name']
+
+    def save(self, *args, **kwargs):
+        self.name = self.name.strip().title()
+        super().save(*args, **kwargs)

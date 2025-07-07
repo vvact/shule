@@ -7,8 +7,10 @@ def material_filter_view(request):
     subjects = Subject.objects.all()
     topics = Topic.objects.all()
 
+    selected_grade_id = request.GET.get('grade')
+    selected_subject_id = request.GET.get('subject')
     selected_topic_id = request.GET.get('topic')
-    
+
     notes = questions = papers = []
 
     if selected_topic_id:
@@ -23,8 +25,9 @@ def material_filter_view(request):
         'notes': notes,
         'questions': questions,
         'papers': papers,
-        'selected_topic_id': selected_topic_id,
+        'selected_grade': selected_grade_id,
+        'selected_subject': selected_subject_id,
+        'selected_topic': selected_topic_id,
     }
 
     return render(request, 'materials/filter_view.html', context)
-

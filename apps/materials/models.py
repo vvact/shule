@@ -3,11 +3,16 @@ from django.db import models
 from ckeditor.fields import RichTextField
 from apps.subjects.models import Topic
 
+
+NOTES = 'notes'
+TOPICAL = 'topical'
+PAPER = 'paper'
+
 class Material(models.Model):
     MATERIAL_TYPE = (
-        ('notes', 'Notes'),
-        ('topical', 'Topical Questions'),
-        ('paper', 'Past Paper'),
+        (NOTES, 'Notes'),
+        (TOPICAL, 'Topical Questions'),
+        (PAPER, 'Past Paper'),
     )
 
     title = models.CharField(max_length=255)
