@@ -1,10 +1,7 @@
 from django.db import models
 
-# Create your models here.
-
 class Grade(models.Model):
-    name = models.CharField(max_length=20)
-
+    name = models.CharField(max_length=20,unique=True)  # e.g., Grade 6, Form 1
 
     class Meta:
         verbose_name = 'Grade'
@@ -13,29 +10,20 @@ class Grade(models.Model):
 
     def __str__(self):
         return self.name
-   
 
 
 class Subject(models.Model):
     """Model representing a subject within a grade."""
     grade = models.ForeignKey(Grade, on_delete=models.CASCADE, related_name='subjects')
-    # e.g., Mathematics, English, Science
     name = models.CharField(max_length=100, unique=True)
 
     class Meta:
         verbose_name = 'Subject'
         verbose_name_plural = 'Subjects'
-        unique_together = ('name',)
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.name = self.name.strip()
-    def save(self, *args, **kwargs):
-        self.name = self.name.strip()
-        super().save(*args, **kwargs)
-
+        unique_together = ('name', 'grade')
 
     def __str__(self):
-        return self.name
+        return f"{self.name} ({self.grade.name})"  # ✅ e.g. Math (Grade 6)
 
 
 class Topic(models.Model):
@@ -44,7 +32,7 @@ class Topic(models.Model):
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.name} ({self.subject.name})"
+        return f"{self.name} ({self.subject.name} - {self.subject.grade.name})"  # ✅ e.g. Fractions (Math - Grade 6)
 
     class Meta:
         verbose_name = 'Topic'
