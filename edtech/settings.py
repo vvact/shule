@@ -123,7 +123,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = os.getenv("STATIC_URL", "/static/")
-STATICFILES_DIRS = [BASE_DIR / "static"]
+# Add this if it's not already there
+STATICFILES_DIRS = [
+    BASE_DIR / "study" / "static",  # Adjust if 'study' is your app
+]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 MEDIA_URL = os.getenv("MEDIA_URL", "/media/")

@@ -1,0 +1,33 @@
+/* static/admin/css/custom.css */
+
+:root {
+  --primary: #1a73e8;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+}
+
+#header {
+  background-color: #1a73e8 !important;
+}
+
+#branding h1 {
+  font-weight: bold;
+  font-size: 22px;
+}
+
+#branding h1 img {
+  height: 40px;
+}
+
+
+/* static/admin/css/custom.css */
+#header {
+  background-color: #1e90ff !important; /* Bright blue header */
+}
+
+#branding h1 {
+  color: rgb(47, 0, 255) !important;
+}
+
