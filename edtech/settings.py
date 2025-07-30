@@ -125,7 +125,7 @@ USE_TZ = True
 STATIC_URL = os.getenv("STATIC_URL", "/static/")
 # Add this if it's not already there
 STATICFILES_DIRS = [
-    BASE_DIR / "study" / "static",  # Adjust if 'study' is your app
+    BASE_DIR / "static",  # Adjust if 'study' is your app
 ]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 

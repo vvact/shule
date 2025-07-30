@@ -1,6 +1,9 @@
 from django.contrib import admin
 from .models import Grade, Subject, Topic, TopicalQuestion, Note
 
+from django.contrib.admin import AdminSite
+from django.utils.translation import gettext_lazy as _
+
 # Inline Notes and Topical Questions under Topic
 class NoteInline(admin.StackedInline):
     model = Note
