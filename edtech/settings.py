@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 
     # Your apps
     "study",
+    'core',
 
 
 ]
